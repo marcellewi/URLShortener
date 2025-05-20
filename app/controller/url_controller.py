@@ -34,23 +34,10 @@ async def redirect_to_url(
     return RedirectResponse(url=original_url)
 
 
-@router.get("/{short_code}/stats", response_model=URLResponse)
-async def get_url_stats(
-    short_code: str, request: Request, url_service: URLService = Depends()
-) -> URLResponse:
-    """
-    Get statistics for a shortened URL
-    """
-    return url_service.get_url_stats(short_code, request)
-
-
 @router.get("/api/{short_code}", response_model=URLResponse)
 async def get_short_url(
     short_code: str, request: Request, url_service: URLService = Depends()
 ) -> URLResponse:
-    """
-    Get a short URL by its code without redirecting or incrementing clicks
-    """
     return url_service.get_short_url(short_code, request)
 
 
@@ -61,9 +48,6 @@ async def update_short_url(
     request: Request,
     url_service: URLService = Depends(),
 ) -> URLResponse:
-    """
-    Update a short URL
-    """
     return url_service.update_short_url(short_code, url_update, request)
 
 
@@ -71,7 +55,4 @@ async def update_short_url(
 async def delete_short_url(
     short_code: str, request: Request, url_service: URLService = Depends()
 ) -> URLResponse:
-    """
-    Delete a short URL
-    """
     return url_service.delete_short_url(short_code, request)

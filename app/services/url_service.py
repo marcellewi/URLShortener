@@ -80,14 +80,6 @@ class URLService:
 
         return url_db.original_url
 
-    def get_url_stats(self, short_code: str, request: Request) -> URLResponse:
-        """
-        Get statistics for a shortened URL
-        """
-        url_db = self._get_url_by_short_code(short_code)
-        base_url = str(request.base_url)
-        return self._create_url_response(url_db, base_url)
-
     def _get_url_by_short_code(self, short_code: str) -> URL:
         """
         Get URL by short code or raise 404
