@@ -1,7 +1,6 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, Request, status
-from fastapi.responses import RedirectResponse
 
 from app.models.url import URLCreate, URLResponse, URLUpdate
 from app.services.url_service import URLService
@@ -53,11 +52,3 @@ async def delete_short_url(
     short_code: str, request: Request, url_service: URLService = Depends()
 ) -> URLResponse:
     return await url_service.delete_short_url(short_code, request)
-
-
-@router.get("/r/{short_code}")
-async def redirect_to_url(
-    short_code: str, request: Request, url_service: URLService = Depends()
-) -> RedirectResponse:
-    original_url = await url_service.get_original_url(short_code, request)
-    return RedirectResponse(url=original_url)
