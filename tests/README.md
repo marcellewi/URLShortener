@@ -7,9 +7,8 @@ This directory contains unit and integration tests for the URL Shortener applica
 To run all tests:
 
 ```bash
-pytest
+poetry run pytest
 ```
-
 
 ## Test Coverage
 
