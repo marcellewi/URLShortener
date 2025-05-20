@@ -51,9 +51,6 @@ class URLService:
         return await self._create_url_response(created_url, base_url)
 
     async def get_short_url(self, short_code: str, request: Request) -> URLResponse:
-        """
-        Get a shortened URL by short code without incrementing clicks
-        """
         url_db = await self._get_url_by_short_code(short_code)
         base_url = str(request.base_url)
         return await self._create_url_response(url_db, base_url)
@@ -61,9 +58,6 @@ class URLService:
     async def update_short_url(
         self, short_code: str, url_update: URLUpdate, request: Request
     ) -> URLResponse:
-        """
-        Update a shortened URL
-        """
         url_db = await self._get_url_by_short_code(short_code)
 
         if url_update.original_url:
@@ -75,7 +69,7 @@ class URLService:
 
     async def delete_short_url(self, short_code: str, request: Request) -> URLResponse:
         """
-        Soft delete a shortened URL by marking it as deleted
+        Soft delete a shortened URl
         """
         url_db = await self._get_url_by_short_code(short_code)
         deleted_url = await self.url_repository.delete(url_db)
@@ -94,9 +88,6 @@ class URLService:
         return url_db.original_url
 
     async def _get_url_by_short_code(self, short_code: str) -> URL:
-        """
-        Get URL by short code or raise 404
-        """
         url_db = await self.url_repository.get_by_short_code(short_code)
 
         if not url_db:

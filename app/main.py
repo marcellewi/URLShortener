@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel
 
+from app.controller import redirect_controller
 from app.controller.api import api_router
 from app.database.db import engine
 
@@ -30,7 +31,9 @@ def on_startup():
     SQLModel.metadata.create_all(engine)
 
 
+# Include controllers
 app.include_router(api_router, prefix="/api")
+app.include_router(redirect_controller.router)
 
 if __name__ == "__main__":
     import uvicorn
