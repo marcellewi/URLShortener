@@ -9,7 +9,6 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -25,6 +24,7 @@ async def root():
 
 
 app.include_router(api_router, prefix="/api")
+
 if __name__ == "__main__":
     import uvicorn
 

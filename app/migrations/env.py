@@ -14,19 +14,17 @@ load_dotenv()
 # access to the values within the .ini file in use.
 config = context.config
 
-# override sqlalchemy.url from alembic.ini with DATABASE_URL from env
-database_url = os.getenv(
-    "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/url_shortener"
-)
+# Explicitly construct a PostgreSQL URL with psycopg2 driver
+db_user = os.getenv("DB_USER", "postgres")
+db_password = os.getenv("DB_PASSWORD", "postgres")
+db_host = os.getenv("DB_HOST", "localhost")
+db_port = os.getenv("DB_PORT", "5432")
+db_name = os.getenv("DB_NAME", "url_shortener")
 
-# Force using psycopg2 for all database operations
-if "postgresql://" in database_url:
-    # Replace asyncpg with psycopg2 if present
-    if "+asyncpg" in database_url:
-        database_url = database_url.replace("+asyncpg", "+psycopg2")
-    # Add psycopg2 if no driver specified
-    elif "+psycopg2" not in database_url:
-        database_url = database_url.replace("postgresql://", "postgresql+psycopg2://")
+# Explicitly set the connection URL with psycopg2 driver for SQLAlchemy
+database_url = (
+    f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+)
 
 # Set the sqlalchemy.url in the alembic config
 config.set_main_option("sqlalchemy.url", database_url)

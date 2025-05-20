@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Make script exit on first error
+set -e
+
 # Check if Poetry is installed
 if ! command -v poetry &> /dev/null; then
     echo "Poetry is not installed. Installing..."
@@ -24,9 +27,13 @@ else
     echo "PostgreSQL client not found. Please ensure the database is created manually."
 fi
 
+# Create migrations/versions directory if it doesn't exist
+mkdir -p app/migrations/versions
+
 # Run migrations
 echo "Running database migrations..."
-PYTHONPATH=$PWD poetry run alembic upgrade head
+export PYTHONPATH=$PWD
+poetry run alembic upgrade head
 
 # Start the FastAPI application
 echo "Starting FastAPI application..."
