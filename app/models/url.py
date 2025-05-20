@@ -16,17 +16,19 @@ class URL(SQLModel, table=True):
     clicks: int = Field(default=0)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: Optional[datetime] = Field(default=None)
+    is_deleted: bool = Field(default=False)
 
 
+# DTOs
 class URLCreate(SQLModel):
-    """URL creation schema"""
-
     original_url: HttpUrl
 
 
-class URLResponse(SQLModel):
-    """URL response schema"""
+class URLUpdate(SQLModel):
+    original_url: Optional[HttpUrl] = None
 
+
+class URLResponse(SQLModel):
     id: int
     original_url: str
     short_code: str

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, status
 from fastapi.responses import RedirectResponse
 
-from app.models.url import URLCreate, URLResponse
+from app.models.url import URLCreate, URLResponse, URLUpdate
 from app.services.url_service import URLService
 
 router = APIRouter()
@@ -42,3 +42,36 @@ async def get_url_stats(
     Get statistics for a shortened URL
     """
     return url_service.get_url_stats(short_code, request)
+
+
+@router.get("/api/{short_code}", response_model=URLResponse)
+async def get_short_url(
+    short_code: str, request: Request, url_service: URLService = Depends()
+) -> URLResponse:
+    """
+    Get a short URL by its code without redirecting or incrementing clicks
+    """
+    return url_service.get_short_url(short_code, request)
+
+
+@router.put("/api/{short_code}", response_model=URLResponse)
+async def update_short_url(
+    short_code: str,
+    url_update: URLUpdate,
+    request: Request,
+    url_service: URLService = Depends(),
+) -> URLResponse:
+    """
+    Update a short URL
+    """
+    return url_service.update_short_url(short_code, url_update, request)
+
+
+@router.delete("/api/{short_code}")
+async def delete_short_url(
+    short_code: str, request: Request, url_service: URLService = Depends()
+) -> URLResponse:
+    """
+    Delete a short URL
+    """
+    return url_service.delete_short_url(short_code, request)
