@@ -1,102 +1,86 @@
-# URL Shortener
+# URL Shortener Service
 
-A scalable URL shortening service built with FastAPI, SQLModel, and Alembic.
+A scalable URL shortening service built with FastAPI, SQLModel, and PostgreSQL.
 
-## Features
+## Architecture Overview
 
-- Create shortened URLs from long URLs
-- Create custom aliases for URLs (e.g., custom short codes)
-- Track analytics data including click counts
-- Redirect from short URLs to original URLs
-- Get, update, and delete short URLs
-- List all URLs with pagination
-- View top clicked URLs and analytics summaries
-- Soft delete functionality
-- Efficient 6-character alphanumeric codes
-- PostgreSQL database with SQLModel ORM
+This service is built using a modern tech stack with clean architecture principles:
 
-## Running with Docker
+- **Backend**: FastAPI framework for high-performance API endpoints
+- **Database**: PostgreSQL with SQLModel ORM for data persistence
+- **Migration**: Alembic for database migrations
+- **Containerization**: Docker and Docker Compose for easy deployment
+- **Project Structure**:
+  - `app/models`: Data models and schemas
+  - `app/services`: Business logic and service layer
+  - `app/controller`: API route definitions and controllers
+  - `app/database`: Database connection and configuration
+  - `app/migrations`: Database migration scripts
+
+The application follows a layered architecture separating concerns:
+- REST API endpoints in controllers
+- Business logic in services
+- Data access through models
+- PostgreSQL for persistent storage
+
+## Setup and Deployment Instructions
+
+### Prerequisites
+- Docker and Docker Compose
+
+### Deployment Steps
 
 1. Clone the repository
+   ```
+   git clone <repository-url>
+   ```
 
-2. Start the application with Docker Compose:
+2. Deploy with Docker Compose
    ```
    docker compose up --build
    ```
 
-3. The application will be available at `http://localhost:8000`
+3. The application will be available at:
+   - API: http://localhost:8000
+   - API Documentation: http://localhost:8000/docs
 
-4. To stop and remove containers and volumes:
+4. To stop and clean up
    ```
    docker compose down -v
    ```
 
-## Manual Installation
-
-1. Set up your PostgreSQL database
-
-2. Create a `.env` file with the following variables:
-   ```
-   DB_USER=postgres
-   DB_PASSWORD=postgres
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_NAME=url_shortener
-   ```
-
-3. Install dependencies with Poetry:
-   ```
-   poetry install
-   ```
-
-4. Run migrations to set up the database:
-   ```
-   alembic upgrade head
-   ```
-
-5. Start the application:
-   ```
-   uvicorn app.main:app --host 0.0.0.0 --port 8000
-   ```
-
 ## API Endpoints
 
+The service provides the following key endpoints:
+
 - `GET /{short_code}` - Redirect to the original URL
-
-- `GET /api/urls` - Get all URLs (with pagination)
-  - Query parameters:
-    - `skip`: Number of records to skip (default: 0)
-    - `limit`: Maximum number of records to return (default: 100)
-
 - `POST /api/urls/shorten` - Create a shortened URL
-  ```json
-  {
-    "original_url": "https://example.com/very/long/path",
-    "custom_alias": "my-custom-link"  // Optional
-  }
-  ```
-
+- `GET /api/urls` - Get all URLs (with pagination)
 - `GET /api/urls/{short_code}` - Get URL information
-
 - `PUT /api/urls/{short_code}` - Update a short URL
-  ```json
-  {
-    "original_url": "https://new-example.com/updated/path"
-  }
-  ```
-
 - `DELETE /api/urls/{short_code}` - Soft delete a URL
-
-- `GET /api/analytics/urls` - Get most clicked URLs (default: top 10)
-  - Query parameters:
-    - `limit`: Maximum number of records to return (default: 10)
-
+- `GET /api/analytics/urls` - Get most clicked URLs
 - `GET /api/analytics/urls/{short_code}` - Get analytics for a specific URL
+- `GET /api/analytics/summary` - Get analytics summary
 
-- `GET /api/analytics/summary` - Get analytics summary (total URLs, clicks, custom URLs)
+Complete API documentation is available at the Swagger UI endpoint when the service is running.
 
-## API Documentation
+## Development Setup
 
-When the application is running, you can access:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
+For local development without Docker:
+
+1. Set up a PostgreSQL database
+2. Configure environment variables in `.env`
+3. Install dependencies: `poetry install`
+4. Run migrations: `alembic upgrade head`
+5. Start the application: `uvicorn app.main:app --reload`
+
+## Assumptions
+
+During development, the following assumptions were made:
+
+1. The service is meant to be self-contained and deployable as a standalone application
+2. Short codes are 6-character alphanumeric strings by default
+3. Soft deletion is preferred over hard deletion to preserve analytics data
+4. PostgreSQL is suitable for the expected scale and performance requirements
+5. The service does not implement authentication/authorization (could be added in future iterations)
