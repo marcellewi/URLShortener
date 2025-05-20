@@ -119,12 +119,9 @@ class URLService:
                 exists = await self.url_repository.exists_by_short_code(short_code)
 
                 if not exists:
-                    # Lock the short code by creating a placeholder entry or using advisory lock
-                    # This depends on the actual implementation of transaction in URLRepository
                     return short_code
 
     async def _create_url_response(self, url_db: URL, base_url: str) -> URLResponse:
-        # This method could perform async operations in the future if needed
         return URLResponse(
             id=url_db.id,
             original_url=url_db.original_url,

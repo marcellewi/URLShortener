@@ -14,7 +14,7 @@ class URLRepository:
         self.db = db
 
     @asynccontextmanager
-    async def transaction(self) -> AsyncContextManager[None]:
+    async def transaction(self) -> AsyncContextManager[None]:  # type: ignore
         """
         Provides a transaction context to ensure atomicity
         """
