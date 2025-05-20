@@ -17,6 +17,7 @@ This service is built using a modern tech stack with clean architecture principl
   - `app/database`: Database connection and configuration
   - `app/migrations`: Database migration scripts
   - `performance_tests`: k6 performance tests
+  - `tests`: Unit and integration tests
 
 The application follows a layered architecture separating concerns:
 - REST API endpoints in controllers
@@ -76,6 +77,20 @@ For local development without Docker:
 4. Run migrations: `alembic upgrade head`
 5. Start the application: `uvicorn app.main:app --reload`
 
+## Testing
+
+The project includes both unit/integration tests and performance tests.
+
+### Running Unit and Integration Tests
+
+The tests use an in-memory SQLite database for isolation from the production database:
+
+```
+poetry run pytest
+```
+
+For more information, see the [tests/README.md](tests/README.md)
+
 ## Performance Testing
 
 The project includes performance tests using [k6](https://k6.io/).
@@ -89,8 +104,13 @@ The project includes performance tests using [k6](https://k6.io/).
    ```
    k6 run performance_tests/simple_test.js
    ```
+   
+3. Run with in-memory database:
+   ```
+   poetry run python performance_tests/run_with_inmemory.py
+   ```
 
-3. For more options and details, see the [performance_tests/README.md](performance_tests/README.md)
+4. For more options and details, see the [performance_tests/README.md](performance_tests/README.md)
 
 ## Assumptions
 
