@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import AsyncContextManager, List, Optional
 
 from fastapi import Depends
-from sqlmodel import Session, select
+from sqlmodel import Session, func, select
 
 from app.database.db import get_db
 from app.models.url import URL
@@ -83,3 +83,47 @@ class URLRepository:
     ) -> bool:
         result = await self.get_by_short_code(short_code, include_deleted)
         return result is not None
+
+    # Analytics methods
+
+    async def get_most_clicked(
+        self, limit: int = 10, include_deleted: bool = False
+    ) -> List[URL]:
+        """
+        Get URLs ordered by click count (descending)
+        """
+        statement = select(URL).order_by(URL.clicks.desc()).limit(limit)
+        if not include_deleted:
+            statement = statement.where(URL.is_deleted == False)  # noqa: E712
+        result = self.db.exec(statement)
+        return result.all()
+
+    async def count_urls(self, include_deleted: bool = False) -> int:
+        """
+        Count total number of URLs
+        """
+        statement = select(func.count(URL.id))
+        if not include_deleted:
+            statement = statement.where(URL.is_deleted == False)  # noqa: E712
+        result = self.db.exec(statement)
+        return result.first() or 0
+
+    async def count_total_clicks(self, include_deleted: bool = False) -> int:
+        """
+        Count total number of clicks across all URLs
+        """
+        statement = select(func.sum(URL.clicks))
+        if not include_deleted:
+            statement = statement.where(URL.is_deleted == False)  # noqa: E712
+        result = self.db.exec(statement)
+        return result.first() or 0
+
+    async def count_custom_urls(self, include_deleted: bool = False) -> int:
+        """
+        Count number of custom URLs
+        """
+        statement = select(func.count(URL.id)).where(URL.is_custom == True)  # noqa: E712
+        if not include_deleted:
+            statement = statement.where(URL.is_deleted == False)  # noqa: E712
+        result = self.db.exec(statement)
+        return result.first() or 0

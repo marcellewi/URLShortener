@@ -5,9 +5,12 @@ A scalable URL shortening service built with FastAPI, SQLModel, and Alembic.
 ## Features
 
 - Create shortened URLs from long URLs
+- Create custom aliases for URLs (e.g., custom short codes)
+- Track analytics data including click counts
 - Redirect from short URLs to original URLs
 - Get, update, and delete short URLs
 - List all URLs with pagination
+- View top clicked URLs and analytics summaries
 - Soft delete functionality
 - Efficient 6-character alphanumeric codes
 - PostgreSQL database with SQLModel ORM
@@ -68,7 +71,8 @@ A scalable URL shortening service built with FastAPI, SQLModel, and Alembic.
 - `POST /api/urls/shorten` - Create a shortened URL
   ```json
   {
-    "original_url": "https://example.com/very/long/path"
+    "original_url": "https://example.com/very/long/path",
+    "custom_alias": "my-custom-link"  // Optional
   }
   ```
 
@@ -82,6 +86,14 @@ A scalable URL shortening service built with FastAPI, SQLModel, and Alembic.
   ```
 
 - `DELETE /api/urls/{short_code}` - Soft delete a URL
+
+- `GET /api/analytics/urls` - Get most clicked URLs (default: top 10)
+  - Query parameters:
+    - `limit`: Maximum number of records to return (default: 10)
+
+- `GET /api/analytics/urls/{short_code}` - Get analytics for a specific URL
+
+- `GET /api/analytics/summary` - Get analytics summary (total URLs, clicks, custom URLs)
 
 ## API Documentation
 
