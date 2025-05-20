@@ -24,3 +24,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+# Create an alias for get_db to make tests clearer
+get_session = get_db
