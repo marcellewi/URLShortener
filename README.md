@@ -16,6 +16,7 @@ This service is built using a modern tech stack with clean architecture principl
   - `app/controller`: API route definitions and controllers
   - `app/database`: Database connection and configuration
   - `app/migrations`: Database migration scripts
+  - `performance_tests`: k6 performance tests
 
 The application follows a layered architecture separating concerns:
 - REST API endpoints in controllers
@@ -74,6 +75,22 @@ For local development without Docker:
 3. Install dependencies: `poetry install`
 4. Run migrations: `alembic upgrade head`
 5. Start the application: `uvicorn app.main:app --reload`
+
+## Performance Testing
+
+The project includes performance tests using [k6](https://k6.io/).
+
+### Prerequisites
+- Install k6: https://k6.io/docs/getting-started/installation/
+
+### Running Performance Tests
+1. Make sure the application is running
+2. Run the test:
+   ```
+   k6 run performance_tests/simple_test.js
+   ```
+
+3. For more options and details, see the [performance_tests/README.md](performance_tests/README.md)
 
 ## Assumptions
 
