@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "url-shortener"
+version = "0.1.0"
+description = "URL Shortener service"
+authors = ["Marcel Lewi <marchulew@gmail.com>"]
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.109.0"
+uvicorn = "^0.27.0"
+python-dotenv = "^1.0.0"
+
+sqlmodel = "^0.0.24"
+alembic = "^1.15.2"
+psycopg2-binary = "^2.9.10"
+
+pydantic = ">=2,<3"
+asyncpg = "^0.28.0"
+greenlet = "^2.0.2"
+ 
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api" 
