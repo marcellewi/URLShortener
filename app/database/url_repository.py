@@ -21,8 +21,8 @@ class URLRepository:
         statement = (
             select(URL)
             .where(URL.short_code == short_code)
-            .where(URL.is_deleted == False)
-        )  # noqa: E712
+            .where(URL.is_deleted == False)  # noqa: E712
+        )
         result = self.db.exec(statement)
         return result.first()
 
